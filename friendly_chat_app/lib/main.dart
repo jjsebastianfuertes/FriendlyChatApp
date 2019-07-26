@@ -7,12 +7,8 @@ void main() {
 class MyFriendlyChatApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Friendly App'),
-          backgroundColor: Color(0xffD53791),
-        ),
-      ),
+      title: 'Friendly Chat',
+      home: ChatScreen(),
     );
   }
 }
@@ -20,8 +16,11 @@ class MyFriendlyChatApp extends StatelessWidget {
 class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('FriendlyChat App'),
+        backgroundColor: Color(0xffD53791),
+      ),
+    );
   }
 }
-
-
