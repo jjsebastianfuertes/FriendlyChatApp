@@ -7,16 +7,20 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final List<ChatMessage> _message = <ChatMessage>[];
+  final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = TextEditingController();
+  bool _isComposing = false;
 
   void _handleSubmitted(String text) {
     _textController.clear();
+    setState(() {
+      _isComposing = false;
+    });
     ChatMessage message = ChatMessage(
       text: text,
     );
     setState(() {
-      _message.insert(0, message);
+      _messages.insert(0, message);
     });
   }
 
@@ -30,6 +34,11 @@ class _ChatScreenState extends State<ChatScreen> {
             Flexible(
               child: TextField(
                 controller: _textController,
+                onChanged: (String text) {
+                  setState(() {
+                    _isComposing = text.length > 0;
+                  });
+                },
                 onSubmitted: _handleSubmitted,
                 decoration:
                     InputDecoration.collapsed(hintText: 'Send a message'),
@@ -41,7 +50,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   icon: Icon(
                     Icons.send,
                   ),
-                  onPressed: () => _handleSubmitted(_textController.text)),
+                  onPressed: _isComposing
+                      ? () => _handleSubmitted(_textController.text)
+                      : null),
             ),
           ],
         ),
@@ -62,14 +73,15 @@ class _ChatScreenState extends State<ChatScreen> {
             child: ListView.builder(
               padding: EdgeInsets.all(8.0),
               reverse: true,
-              itemBuilder: (_, int index) => _message[index],
-              itemCount: _message.length,
+              itemBuilder: (_, int index) => _messages[index],
+              itemCount: _messages.length,
             ),
           ),
           Divider(height: 1.0),
           Container(
             decoration: BoxDecoration(
-                color: Colors.white, border: Border.all(color: Colors.black54, width: 0.2)),
+                color: Colors.white,
+                border: Border.all(color: Colors.black54, width: 0.2)),
             child: _buildTextComposer(),
           )
         ],
